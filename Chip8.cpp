@@ -2,9 +2,31 @@
 
 #include <fstream>
 #include <iostream>
-#include <string>
-#include <cstdlib> 
+#include <cstdlib>
 #include <ctime>
+
+const unsigned int FONTSET_SIZE = 80;
+uint8_t chip8Fontset[FONTSET_SIZE] = { // Every charater is 4 pixels wide and 5 pixels high
+    0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
+    0x20, 0x60, 0x20, 0x20, 0x70, // 1
+    0xF0, 0x10, 0xF0, 0x80, 0xF0, // 2
+    0xF0, 0x10, 0xF0, 0x10, 0xF0, // 3
+    0x90, 0x90, 0xF0, 0x10, 0x10, // 4
+    0xF0, 0x80, 0xF0, 0x10, 0xF0, // 5
+    0xF0, 0x80, 0xF0, 0x90, 0xF0, // 6
+    0xF0, 0x10, 0x20, 0x40, 0x40, // 7
+    0xF0, 0x90, 0xF0, 0x90, 0xF0, // 8
+    0xF0, 0x90, 0xF0, 0x10, 0xF0, // 9
+    0xF0, 0x90, 0xF0, 0x90, 0x90, // A
+    0xE0, 0x90, 0xE0, 0x90, 0xE0, // B
+    0xF0, 0x80, 0x80, 0x80, 0xF0, // C
+    0xE0, 0x90, 0x90, 0x90, 0xE0, // D
+    0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
+    0xF0, 0x80, 0xF0, 0x80, 0x80  // F
+}; // Chip8 fontset
+
+const unsigned int START_ADDRESS = 0x200; // Program counter starts at 0x200
+const unsigned int FONTSET_START_ADDRESS = 0x50; // Fontset starts at 0x50
 
 Chip8::Chip8()
     : I(0),
@@ -15,7 +37,7 @@ Chip8::Chip8()
     sp(0)
 {
     // Load the fontset into memory
-    for (int i = 0; i < FONTSET_SIZE; i++)
+    for (unsigned int i = 0; i < FONTSET_SIZE; i++)
     {
         memory[FONTSET_START_ADDRESS + i] = chip8Fontset[i];
     }
@@ -24,7 +46,7 @@ Chip8::Chip8()
     srand(time(NULL));
 }
 
-void Chip8::loadGame(std::string filename)
+void Chip8::loadGame(char const* filename)
 {
     // Open the file
     std::ifstream file(filename, std::ios::binary);
@@ -54,6 +76,10 @@ void Chip8::cycle()
     // Increment the program counter
     pc += 2;
 
+    // Debugging purposes
+    // std::cout << "opcode: " << std::hex << opcode << std::endl;
+    // std::cout << "pc: " << pc << std::endl;
+
     // Decode and execute the opcode
     switch (opcode & 0xF000) // First 4 bits
     {
@@ -80,13 +106,9 @@ void Chip8::cycle()
 
     // Update timers
     if (delayTimer > 0)
-    {
         delayTimer--;
-    }
     if (soundTimer > 0)
-    {
         soundTimer--;
-    }
 }
 
 void Chip8::decodeOpcode0(uint16_t opcode)
@@ -353,13 +375,13 @@ void Chip8::executeOpcodeDXYN(uint16_t opcode)
             {
                 uint32_t* pixel_ptr = (uint32_t*)&display[(y + row) * SCREEN_WIDTH + (x + col)];
                 // If the pixel on the screen is already set, set VF to 1, else set it to 0
-                if (*pixel_ptr == 1)
+                if (*pixel_ptr == 0xFFFFFFFF)
                     registers[0xF] = 1;
                 else
                     registers[0xF] = 0;
 
                 // Xor the pixel on the screen with the pixel of the sprite
-                *pixel_ptr ^= 1;
+                *pixel_ptr ^= 0xFFFFFFFF;
             }
         }
     }
@@ -517,5 +539,3 @@ void Chip8::executeOpcodeFX65(uint16_t opcode)
     for (uint8_t i = 0; i <= VX; i++)
         registers[i] = memory[I + i];
 }
-
-
