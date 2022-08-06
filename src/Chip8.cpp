@@ -77,8 +77,8 @@ void Chip8::cycle()
     pc += 2;
 
     // Debugging purposes
-    // std::cout << "opcode: " << std::hex << opcode << std::endl;
-    // std::cout << "pc: " << pc << std::endl;
+    std::cout << "opcode: " << std::hex << opcode << std::endl;
+    std::cout << "pc: " << pc << std::endl;
 
     // Decode and execute the opcode
     switch (opcode & 0xF000) // First 4 bits
@@ -450,21 +450,22 @@ void Chip8::executeOpcodeFX0A(uint16_t opcode)
     // A key press is awaited, and then stored in VX.
     // (Blocking Operation. All instruction halted until next key event);
     uint8_t VX = (opcode & 0x0F00) >> 8;
-    uint8_t key = 0;
+    uint8_t key = -1;
 
-    while (key == 0)
+    for (uint8_t i = 0; i < 16; i++)
     {
-        for (uint8_t i = 0; i < 16; i++)
+        if (keypad[i])
         {
-            if (keypad[i])
-            {
-                key = i;
-                break;
-            }
+            key = i;
+            break;
         }
     }
 
-    registers[VX] = key;
+    // If no key is pressed, pc is not incremented
+    if (key != -1)
+        registers[VX] = key;
+    else
+        pc -= 2;
 }
 
 void Chip8::executeOpcodeFX15(uint16_t opcode)
