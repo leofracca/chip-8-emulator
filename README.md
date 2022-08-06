@@ -36,11 +36,11 @@ To run the executable:
 
 where:
 
-- <scale> represents the scale of the window
+- `scale` represents the scale of the window
 
-- <delay> represents the speed of the game
+- `delay` represents the speed of the game
 
-- <ROM> represents the file of the game to be loaded
+- `ROM` represents the file of the game to be loaded
 
 For example, let's suppose that there is a ROM called Pong.ch8 (**.ch8** is the extension of the ROMs for the Chip-8) inside the root directory of the project. If we are currently inside the build folder, the command would be:
 
@@ -48,7 +48,7 @@ For example, let's suppose that there is a ROM called Pong.ch8 (**.ch8** is the 
 ./chip8 20 1 ../Pong.ch8
 ```
 
-If the speed of the game is too high, try to increment the <delay> variable, for example setting it to 3 or 4.
+If the speed of the game is too high, try to increment the `delay` variable, for example setting it to 3 or 4.
 
 ## Download ROMs
 
