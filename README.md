@@ -48,6 +48,8 @@ For example, let's suppose that there is a ROM called Pong.ch8 (**.ch8** is the 
 ./chip8 20 1 ../Pong.ch8
 ```
 
+If the speed of the game is too high, try to increment the <delay> variable, for example setting it to 3 or 4.
+
 ## Download ROMs
 
 You can download Chip-8 ROMs from this [here](https://github.com/dmatlack/chip8/tree/master/roms/games).
