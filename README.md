@@ -52,7 +52,7 @@ If the speed of the game is too high, try to increment the `delay` variable, for
 
 ## Download ROMs
 
-You can download Chip-8 ROMs from this [here](https://github.com/dmatlack/chip8/tree/master/roms/games).
+You can download Chip-8 ROMs from [here](https://github.com/dmatlack/chip8/tree/master/roms/games).
 
 ## Images
 
