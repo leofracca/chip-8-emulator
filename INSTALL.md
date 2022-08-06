@@ -30,10 +30,9 @@ Now that you have installed all the required software you can build the emulator
 
 ```shell
 git clone https://github.com/leofracca/chip-8-emulator
+cd 
 mkdir build
 cd build
 cmake ..
 make
 ```
-
-
